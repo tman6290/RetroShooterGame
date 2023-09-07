@@ -1,0 +1,10 @@
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\bin\Debug\2DShooterGame.exe.config
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\bin\Debug\2DShooterGame.exe
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\bin\Debug\2DShooterGame.pdb
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\2DShooterGame.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\_2DShooterGame.Form1.resources
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\_2DShooterGame.Properties.Resources.resources
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\2DShooterGame.csproj.GenerateResource.cache
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\2DShooterGame.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\2DShooterGame.exe
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\2DShooterGame.pdb

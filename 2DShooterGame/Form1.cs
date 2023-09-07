@@ -16,5 +16,10 @@ namespace _2DShooterGame
         {
             InitializeComponent();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
