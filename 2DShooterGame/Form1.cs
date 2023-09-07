@@ -12,6 +12,9 @@ namespace _2DShooterGame
 {
     public partial class Form1 : Form
     {
+        PictureBox[] stars;
+        int backgroundSpeed;
+        Random random;
         public Form1()
         {
             InitializeComponent();
