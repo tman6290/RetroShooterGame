@@ -7,11 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WMPLib;
 
 namespace _2DShooterGame
 {
     public partial class Form1 : Form
     {
+        WindowsMediaPlayer gameMedia;
+        WindowsMediaPlayer shootingMedia;
+        
         PictureBox[] stars;
         int backgroundSpeed;
         int playerSpeed;
@@ -46,6 +50,18 @@ namespace _2DShooterGame
                 this.Controls.Add(ammo[i]);
             }
 
+            //Create WMP
+            gameMedia = new WindowsMediaPlayer();
+            shootingMedia = new WindowsMediaPlayer();
+
+            //Load all songs
+            gameMedia.URL = "Game_Assets\\BgMusic.mp3";
+            shootingMedia.URL = "Game_Assets\\laserblast.mp3";
+
+            //Setup Songs settings
+            gameMedia.settings.setMode("loop", true);
+            gameMedia.settings.volume = 5;
+            shootingMedia.settings.volume = 1;
 
             stars = new PictureBox[15];
             random = new Random();
@@ -69,6 +85,8 @@ namespace _2DShooterGame
                 this.Controls.Add(stars[i]);
 
             }
+
+            gameMedia.controls.play();
         }
 
         private void MoveBgTimer_Tick(object sender, EventArgs e)
@@ -155,6 +173,7 @@ namespace _2DShooterGame
 
         private void MoveAmmoTimer_Tick(object sender, EventArgs e)
         {
+            shootingMedia.controls.play();
             for (int i = 0; i < ammo.Length; i++)
             {
                 if (ammo[i].Top > 0)

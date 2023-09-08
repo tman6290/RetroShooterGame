@@ -8,3 +8,5 @@ C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\2DShooterGame.
 C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\2DShooterGame.csproj.CoreCompileInputs.cache
 C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\2DShooterGame.exe
 C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\2DShooterGame.pdb
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\Interop.WMPLib.dll
+C:\Users\HP\source\repos\RetroShooterGame\2DShooterGame\obj\Debug\2DShooterGame.csproj.ResolveComReference.cache
