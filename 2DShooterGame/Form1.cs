@@ -15,6 +15,10 @@ namespace _2DShooterGame
         PictureBox[] stars;
         int backgroundSpeed;
         int playerSpeed;
+
+        PictureBox[] ammo;
+        int AmmoSpeed;
+
         Random random;
         public Form1()
         {
@@ -25,7 +29,25 @@ namespace _2DShooterGame
         {
             backgroundSpeed = 4;
             playerSpeed = 4;
-            stars = new PictureBox[10];
+
+            AmmoSpeed = 20;
+            ammo = new PictureBox[3];
+
+            //Load images
+            Image ammopic = Image.FromFile(@"Game_Assets\munition.png");
+
+            for (int i = 0; i < ammo.Length; i++)
+            {
+                ammo[i] = new PictureBox();
+                ammo[i].Size = new Size(8, 8);
+                ammo[i].Image = ammopic;
+                ammo[i].SizeMode = PictureBoxSizeMode.Zoom;
+                ammo[i].BorderStyle = BorderStyle.None;
+                this.Controls.Add(ammo[i]);
+            }
+
+
+            stars = new PictureBox[15];
             random = new Random();
 
             for (int i = 0; i < stars.Length; i++)
@@ -81,21 +103,13 @@ namespace _2DShooterGame
 
         private void RightMoveTimer_Tick(object sender, EventArgs e)
         {
-            if (Player.Right > 580)
+            if (Player.Right < 580)
             {
-                Player.Left -= playerSpeed;
+                Player.Left += playerSpeed;
             }
         }
 
         private void UpMoveTimer_Tick(object sender, EventArgs e)
-        {
-            if (Player.Top < 400)
-            {
-                Player.Top += playerSpeed;
-            }
-        }
-
-        private void DownMoveTimer_Tick(object sender, EventArgs e)
         {
             if (Player.Top > 10)
             {
@@ -103,14 +117,57 @@ namespace _2DShooterGame
             }
         }
 
+        private void DownMoveTimer_Tick(object sender, EventArgs e)
+        {
+            if (Player.Top < 400)
+            {
+                Player.Top += playerSpeed;
+            }
+        }
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.KeyCode == Keys.Right)
+            {
+                RightMoveTimer.Start();
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                LeftMoveTimer.Start();
+            }
+            if (e.KeyCode == Keys.Up)
+            {
+                UpMoveTimer.Start();
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                DownMoveTimer.Start();
+            }
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
+            RightMoveTimer.Stop();
+            LeftMoveTimer.Stop();
+            UpMoveTimer.Stop();
+            DownMoveTimer.Stop();
+        }
 
+        private void MoveAmmoTimer_Tick(object sender, EventArgs e)
+        {
+            for (int i = 0; i < ammo.Length; i++)
+            {
+                if (ammo[i].Top > 0)
+                {
+                    ammo[i].Visible = true;
+                    ammo[i].Top -= AmmoSpeed;
+                }
+                else 
+                {
+                    ammo[i].Visible = false;
+                    ammo[i].Location = new Point(Player.Location.X + 20, Player.Location.Y - i * 30);
+                }
+            }
         }
     }
 }

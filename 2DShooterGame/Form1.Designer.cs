@@ -36,6 +36,7 @@
             this.RightMoveTimer = new System.Windows.Forms.Timer(this.components);
             this.UpMoveTimer = new System.Windows.Forms.Timer(this.components);
             this.DownMoveTimer = new System.Windows.Forms.Timer(this.components);
+            this.MoveAmmoTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Player)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,11 +77,17 @@
             this.DownMoveTimer.Interval = 5;
             this.DownMoveTimer.Tick += new System.EventHandler(this.DownMoveTimer_Tick);
             // 
+            // MoveAmmoTimer
+            // 
+            this.MoveAmmoTimer.Enabled = true;
+            this.MoveAmmoTimer.Interval = 20;
+            this.MoveAmmoTimer.Tick += new System.EventHandler(this.MoveAmmoTimer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Navy;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(584, 461);
             this.Controls.Add(this.Player);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -103,6 +110,7 @@
         private System.Windows.Forms.Timer RightMoveTimer;
         private System.Windows.Forms.Timer UpMoveTimer;
         private System.Windows.Forms.Timer DownMoveTimer;
+        private System.Windows.Forms.Timer MoveAmmoTimer;
     }
 }
 
