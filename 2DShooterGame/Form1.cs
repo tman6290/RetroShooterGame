@@ -23,6 +23,9 @@ namespace _2DShooterGame
         PictureBox[] ammo;
         int AmmoSpeed;
 
+        PictureBox[] enemies;
+        int enemySpeed;
+
         Random random;
         public Form1()
         {
@@ -33,12 +36,44 @@ namespace _2DShooterGame
         {
             backgroundSpeed = 4;
             playerSpeed = 4;
-
+            enemySpeed = 4;
             AmmoSpeed = 20;
+
             ammo = new PictureBox[3];
 
             //Load images
             Image ammopic = Image.FromFile(@"Game_Assets\munition.png");
+            Image enemy1 = Image.FromFile(@"Game_Assets\E1.png");
+            Image enemy2 = Image.FromFile(@"Game_Assets\E2.png");
+            Image enemy3 = Image.FromFile(@"Game_Assets\E3.png");
+            Image boss1 = Image.FromFile(@"Game_Assets\Boss1.png");
+            Image boss2 = Image.FromFile(@"Game_Assets\Boss2.png");
+
+            enemies = new PictureBox[10];
+
+            //Initialize EnemiesPictureBoxes
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                enemies[i] = new PictureBox();
+                enemies[i].Size = new Size(40, 40);
+                enemies[i].SizeMode = PictureBoxSizeMode.Zoom;
+                enemies[i].BorderStyle = BorderStyle.None;
+                enemies[i].Visible = false;
+                this.Controls.Add(enemies[i]);
+                enemies[i].Location = new Point((i + 1) * 50, -50);
+            }
+
+            enemies[0].Image = boss1;
+            enemies[1].Image = enemy1;
+            enemies[2].Image = enemy2;
+            enemies[3].Image = enemy1;
+            enemies[4].Image = enemy3;
+            enemies[5].Image = enemy2;
+            enemies[6].Image = enemy2;
+            enemies[7].Image = enemy3;
+            enemies[8].Image = enemy3;
+            enemies[9].Image = boss2;
+
 
             for (int i = 0; i < ammo.Length; i++)
             {
@@ -56,7 +91,7 @@ namespace _2DShooterGame
 
             //Load all songs
             gameMedia.URL = "Game_Assets\\BgMusic.mp3";
-            shootingMedia.URL = "Game_Assets\\laserblast.mp3";
+            shootingMedia.URL = "Game_Assets\\laserblast2.mp3";
 
             //Setup Songs settings
             gameMedia.settings.setMode("loop", true);
@@ -187,6 +222,27 @@ namespace _2DShooterGame
                     ammo[i].Location = new Point(Player.Location.X + 20, Player.Location.Y - i * 30);
                 }
             }
+        }
+
+        private void MoveEnemiesTimer_Tick(object sender, EventArgs e)
+        {
+            MoveEnemies(enemies, enemySpeed);
+        }
+
+        private void MoveEnemies(PictureBox[] array, int speed)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].Visible = true;
+                array[i].Top += speed;
+
+                if (array[i].Top > this.Height)
+                {
+                    array[i].Location = new Point((i + 1) * 50, -200);
+                }
+            }
+            
+
         }
     }
 }
