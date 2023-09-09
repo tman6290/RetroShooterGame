@@ -31,6 +31,13 @@ namespace _2DShooterGame
         int enemySpeed;
 
         Random random;
+
+
+        int score;
+        int level;
+        int difficulty;
+        bool pause;
+        bool gameIsOver;
         public Form1()
         {
             InitializeComponent();
@@ -38,6 +45,12 @@ namespace _2DShooterGame
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            pause = false;
+            gameIsOver = false;
+            score = 0;
+            level = 1;
+            difficulty = 9;
+            
             backgroundSpeed = 4;
             playerSpeed = 4;
             enemySpeed = 4;
@@ -102,9 +115,9 @@ namespace _2DShooterGame
 
             //Setup Songs settings
             gameMedia.settings.setMode("loop", true);
-            gameMedia.settings.volume = 5;
+            gameMedia.settings.volume = 12;
             shootingMedia.settings.volume = 1;
-            explosion.settings.volume = 6;
+            explosion.settings.volume = 0;
 
             stars = new PictureBox[15];
             random = new Random();
@@ -203,22 +216,26 @@ namespace _2DShooterGame
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Right)
+            if (!pause)
             {
-                RightMoveTimer.Start();
+                if (e.KeyCode == Keys.Right)
+                {
+                    RightMoveTimer.Start();
+                }
+                if (e.KeyCode == Keys.Left)
+                {
+                    LeftMoveTimer.Start();
+                }
+                if (e.KeyCode == Keys.Up)
+                {
+                    UpMoveTimer.Start();
+                }
+                if (e.KeyCode == Keys.Down)
+                {
+                    DownMoveTimer.Start();
+                }
             }
-            if (e.KeyCode == Keys.Left)
-            {
-                LeftMoveTimer.Start();
-            }
-            if (e.KeyCode == Keys.Up)
-            {
-                UpMoveTimer.Start();
-            }
-            if (e.KeyCode == Keys.Down)
-            {
-                DownMoveTimer.Start();
-            }
+            
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
@@ -227,6 +244,26 @@ namespace _2DShooterGame
             LeftMoveTimer.Stop();
             UpMoveTimer.Stop();
             DownMoveTimer.Stop();
+
+            if (e.KeyCode == Keys.Space)
+            {
+                if (pause)
+                {
+                    StartTimers();
+                    label3.Visible = false;
+                    gameMedia.controls.play();
+                    pause = false;
+                }
+                else 
+                {
+                    label3.Location = new Point(this.Width/2 -120, 150);
+                    label3.Text = "PAUSED";
+                    label3.Visible = true;
+                    gameMedia.controls.pause();
+                    StopTimers();
+                    pause = true;
+                }
+            }
         }
 
         private void MoveAmmoTimer_Tick(object sender, EventArgs e)
@@ -278,7 +315,29 @@ namespace _2DShooterGame
                     ammo[1].Bounds.IntersectsWith(enemies[i].Bounds) ||
                     ammo[2].Bounds.IntersectsWith(enemies[i].Bounds))
                 {
+                    explosion.settings.volume = 10;
                     explosion.controls.play();
+
+                    score += 1;
+                    scorelabel.Text = (score < 10) ? "SCORE: 0" + score.ToString() : "SCORE: " + score.ToString();
+                    
+                    if (score % 10 == 0)
+                    {
+                        level += 1;
+                        levellabel.Text = (level < 10) ? "LEVEL: 0" + level.ToString() : "LEVEL: " + level.ToString();
+
+                        if (enemySpeed <= 10 && EnemyAmmoSpeed <= 10 && difficulty >= 0)
+                        {
+                            difficulty--;
+                            enemySpeed++;
+                            EnemyAmmoSpeed++;
+                        }
+                        if (level == 10)
+                        {
+                            GameOver("WELL DONE");
+                        }
+                    }
+                        
                     enemies[i].Location = new Point((i + 1) * 50, -100);
                 }
 
@@ -287,13 +346,19 @@ namespace _2DShooterGame
                     explosion.settings.volume = 30;
                     explosion.controls.play();
                     Player.Visible = false;
-                    GameOver("");
+                    GameOver("Game Over");
                 }
             }
         }
 
         private void GameOver(String str)
         {
+            label3.Text = str;
+            label3.Location = new Point(170, 110);
+            label3.Visible = true;
+            ReplayBtn.Visible = true;
+            ExitBtn.Visible = true;
+            
             gameMedia.controls.stop();
             StopTimers();
 
@@ -319,7 +384,7 @@ namespace _2DShooterGame
 
         private void EnemyAmmoTimer_Tick(object sender, EventArgs e)
         {
-            for (int i = 0; i < enemyAmmo.Length; i++)
+            for (int i = 0; i < (enemyAmmo.Length - difficulty); i++)
             {
                 if (enemyAmmo[i].Top < this.Height)
                 {
@@ -351,6 +416,20 @@ namespace _2DShooterGame
                 }
             }
             
+        }
+
+        
+
+        private void ReplayBtn_Click(object sender, EventArgs e)
+        {
+            this.Controls.Clear();
+            InitializeComponent();
+            Form1_Load(e, e);
+        }
+
+        private void ExitBtn_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(1);
         }
     }
 }
