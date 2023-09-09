@@ -15,6 +15,7 @@ namespace _2DShooterGame
     {
         WindowsMediaPlayer gameMedia;
         WindowsMediaPlayer shootingMedia;
+        WindowsMediaPlayer explosion;
         
         PictureBox[] stars;
         int backgroundSpeed;
@@ -22,6 +23,9 @@ namespace _2DShooterGame
 
         PictureBox[] ammo;
         int AmmoSpeed;
+
+        PictureBox[] enemyAmmo;
+        int EnemyAmmoSpeed;
 
         PictureBox[] enemies;
         int enemySpeed;
@@ -38,6 +42,7 @@ namespace _2DShooterGame
             playerSpeed = 4;
             enemySpeed = 4;
             AmmoSpeed = 20;
+            EnemyAmmoSpeed = 4;
 
             ammo = new PictureBox[3];
 
@@ -88,18 +93,22 @@ namespace _2DShooterGame
             //Create WMP
             gameMedia = new WindowsMediaPlayer();
             shootingMedia = new WindowsMediaPlayer();
+            explosion = new WindowsMediaPlayer();
 
             //Load all songs
             gameMedia.URL = "Game_Assets\\BgMusic.mp3";
             shootingMedia.URL = "Game_Assets\\laserblast2.mp3";
+            explosion.URL = "Game_Assets\\explosion.mp3";
 
             //Setup Songs settings
             gameMedia.settings.setMode("loop", true);
             gameMedia.settings.volume = 5;
             shootingMedia.settings.volume = 1;
+            explosion.settings.volume = 6;
 
             stars = new PictureBox[15];
             random = new Random();
+
 
             for (int i = 0; i < stars.Length; i++)
             {
@@ -119,6 +128,20 @@ namespace _2DShooterGame
 
                 this.Controls.Add(stars[i]);
 
+            }
+
+            //Enemies Ammo
+            enemyAmmo = new PictureBox[10];
+            
+            for (int i = 0; i < enemyAmmo.Length;i++)
+            {
+                enemyAmmo[i] = new PictureBox();
+                enemyAmmo[i].Size = new Size(2, 25);
+                enemyAmmo[i].Visible = false;
+                enemyAmmo[i].BackColor = Color.Yellow;
+                int x = random.Next(0, 10);
+                enemyAmmo[i].Location = new Point(enemies[x].Location.X, enemies[x].Location.Y - 20);
+                this.Controls.Add(enemyAmmo[i]);
             }
 
             gameMedia.controls.play();
@@ -215,6 +238,8 @@ namespace _2DShooterGame
                 {
                     ammo[i].Visible = true;
                     ammo[i].Top -= AmmoSpeed;
+
+                    Collision();
                 }
                 else 
                 {
@@ -243,6 +268,89 @@ namespace _2DShooterGame
             }
             
 
+        }
+
+        private void Collision()
+        {
+            for (int i = 0; i < enemies.Length; i++) 
+            {
+                if (ammo[0].Bounds.IntersectsWith(enemies[i].Bounds) || 
+                    ammo[1].Bounds.IntersectsWith(enemies[i].Bounds) ||
+                    ammo[2].Bounds.IntersectsWith(enemies[i].Bounds))
+                {
+                    explosion.controls.play();
+                    enemies[i].Location = new Point((i + 1) * 50, -100);
+                }
+
+                if (Player.Bounds.IntersectsWith(enemies[i].Bounds))
+                {
+                    explosion.settings.volume = 30;
+                    explosion.controls.play();
+                    Player.Visible = false;
+                    GameOver("");
+                }
+            }
+        }
+
+        private void GameOver(String str)
+        {
+            gameMedia.controls.stop();
+            StopTimers();
+
+        }
+
+        //Stop Timers
+        private void StopTimers() 
+        {
+            MoveBgTimer.Stop();
+            MoveEnemiesTimer.Stop();
+            MoveAmmoTimer.Stop();
+            EnemyAmmoTimer.Stop();
+        }
+
+        //Start Timers
+        private void StartTimers()
+        {
+            MoveBgTimer.Start();
+            MoveEnemiesTimer.Start();
+            MoveAmmoTimer.Start();
+            EnemyAmmoTimer.Start();
+        }
+
+        private void EnemyAmmoTimer_Tick(object sender, EventArgs e)
+        {
+            for (int i = 0; i < enemyAmmo.Length; i++)
+            {
+                if (enemyAmmo[i].Top < this.Height)
+                {
+                    enemyAmmo[i].Visible = true;
+                    enemyAmmo[i].Top += EnemyAmmoSpeed;
+
+                    CollisionWithEnemyAmmo();
+                }
+                else
+                {
+                    enemyAmmo[i].Visible = false;
+                    int x = random.Next(0, 10);
+                    enemyAmmo[i].Location = new Point(enemies[x].Location.X + 20, enemies[x].Location.Y + 30);
+                }
+            }
+        }
+
+        private void CollisionWithEnemyAmmo()
+        {
+            for (int i = 0; i < enemyAmmo.Length; i++)
+            {
+                if (enemyAmmo[i].Bounds.IntersectsWith(Player.Bounds))
+                {
+                    enemyAmmo[i].Visible = false;
+                    explosion.settings.volume = 30;
+                    explosion.controls.play();
+                    Player.Visible = false;
+                    GameOver("Game Over");
+                }
+            }
+            
         }
     }
 }
