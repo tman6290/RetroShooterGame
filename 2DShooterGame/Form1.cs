@@ -37,7 +37,6 @@ namespace _2DShooterGame
         int level;
         int difficulty;
         bool pause;
-        bool gameIsOver;
         public Form1()
         {
             InitializeComponent();
@@ -46,7 +45,6 @@ namespace _2DShooterGame
         private void Form1_Load(object sender, EventArgs e)
         {
             pause = false;
-            gameIsOver = false;
             score = 0;
             level = 1;
             difficulty = 9;
